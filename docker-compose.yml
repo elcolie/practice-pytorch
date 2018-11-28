@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: DockerFile
+    volumes:
+      - .:/home/jovyan/work
+    ports:
+      # 8888 for jupyter notebook
+      - "8888:8888"
+    command: ["jupyter", "notebook"]

@@ -1,0 +1,12 @@
+FROM jupyter/datascience-notebook
+MAINTAINER Hbot.io
+
+# This image is a bit restrict. The force it to be `root`
+USER root
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install openssh-client -y
+
+WORKDIR /home/jovyan/
+USER jovyan
+ADD conda.in .
+RUN conda install --file conda.in -y
