@@ -104,3 +104,6 @@ venv.bak/
 .mypy_cache/
 .idea
 .csv
+
+cifar-10-classifier/
+data/
