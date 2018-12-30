@@ -2,23 +2,59 @@ import itertools
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import torch
+from constants import CLASS_MAP
 from sklearn.metrics import confusion_matrix
+from torch import randperm
+from torch._utils import _accumulate
+from torch.utils.data import Dataset
+from torch.utils.data import Subset
 
 y_test = []
 y_pred = []
 
-CLASS_MAP = {
-    'Class_1': 0,
-    'Class_2': 1,
-    'Class_3': 2,
-    'Class_4': 3,
-    'Class_5': 4,
-    'Class_6': 5,
-    'Class_7': 6,
-    'Class_8': 7,
-    'Class_9': 8,
-}
+
+class OttoDataset(Dataset):
+    def __init__(self, filename):
+        df = pd.read_csv(filename)
+        self.x_data = df[
+            ['feat_1', 'feat_2', 'feat_3', 'feat_4', 'feat_5', 'feat_6', 'feat_7', 'feat_8', 'feat_9', 'feat_10',
+             'feat_11', 'feat_12', 'feat_13', 'feat_14', 'feat_15', 'feat_16', 'feat_17', 'feat_18', 'feat_19',
+             'feat_20', 'feat_21', 'feat_22', 'feat_23', 'feat_24', 'feat_25', 'feat_26', 'feat_27', 'feat_28',
+             'feat_29', 'feat_30', 'feat_31', 'feat_32', 'feat_33', 'feat_34', 'feat_35', 'feat_36', 'feat_37',
+             'feat_38', 'feat_39', 'feat_40', 'feat_41', 'feat_42', 'feat_43', 'feat_44', 'feat_45', 'feat_46',
+             'feat_47', 'feat_48', 'feat_49', 'feat_50', 'feat_51', 'feat_52', 'feat_53', 'feat_54', 'feat_55',
+             'feat_56', 'feat_57', 'feat_58', 'feat_59', 'feat_60', 'feat_61', 'feat_62', 'feat_63', 'feat_64',
+             'feat_65', 'feat_66', 'feat_67', 'feat_68', 'feat_69', 'feat_70', 'feat_71', 'feat_72', 'feat_73',
+             'feat_74', 'feat_75', 'feat_76', 'feat_77', 'feat_78', 'feat_79', 'feat_80', 'feat_81', 'feat_82',
+             'feat_83', 'feat_84', 'feat_85', 'feat_86', 'feat_87', 'feat_88', 'feat_89', 'feat_90', 'feat_91',
+             'feat_92', 'feat_93']]
+        self.y_data = df['target'].apply(lambda x: CLASS_MAP[x])
+
+    def __getitem__(self, index):
+        x = torch.tensor(self.x_data.iloc[index], dtype=torch.float)
+        y = torch.tensor(self.y_data.iloc[index], dtype=torch.long)
+        return (x, y)
+
+    def __len__(self):
+        return self.x_data.shape[0]
+
+
+def random_split(dataset, lengths):
+    """
+    Randomly split a dataset into non-overlapping new datasets of given lengths.
+
+    Arguments:
+        dataset (Dataset): Dataset to be split
+        lengths (sequence): lengths of splits to be produced
+    """
+    if sum(lengths) != len(dataset):
+        raise ValueError("Sum of input lengths does not equal the length of the input dataset!")
+
+    # Fairly expensive to do list comprehension
+    indices = randperm(sum(lengths)).tolist()
+    return [Subset(dataset, indices[offset - length:offset]) for offset, length in zip(_accumulate(lengths), lengths)]
 
 
 def plot_confusion_matrix(cm, classes,
@@ -59,7 +95,7 @@ def train(model, device, train_loader, optimizer, epoch, criterion):
         loss = criterion(output, target)
         loss.backward()
         optimizer.step()
-        if batch_idx % 100 == 0:
+        if batch_idx % 1000 == 0:
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(train_loader.dataset),
                        100. * batch_idx / len(train_loader), loss.item()))
