@@ -71,24 +71,6 @@ class Dictionary:
         return len(self.word2idx)
 
 
-class WordDataset(Dataset):
-    def __init__(self, filename='train.tsv'):
-        super().__init__()
-        df = pd.read_csv(filename, sep='\t')
-        df['Phrase'] = df['Phrase'].apply(lambda x: x.lower())
-        df['tokenized'] = df['Phrase'].apply(lambda x: [i for i in x.split(' ')])
-
-        self.len = len(df)
-        self.df = df
-
-    def __getitem__(self, index):
-        record = self.df.iloc[index]
-        return record.tokenized, record.Sentiment
-
-    def __len__(self):
-        return self.len
-
-
 class RawDataset(Dataset):
     """
     Intentionally to use only
