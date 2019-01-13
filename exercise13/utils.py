@@ -78,11 +78,13 @@ class RawDataset(Dataset):
 
     def __init__(self, df: pd.DataFrame):
         super().__init__()
-        df['Phrase'] = df['Phrase'].apply(lambda x: x.lower())
-        df['tokenized'] = df['Phrase'].apply(lambda x: [i for i in x.split(' ')])
+        self.df = df.copy()
+        self.df['Phrase'] = self.df['Phrase'].apply(lambda x: x.lower())
+        self.df['tokenized'] = self.df['Phrase'].apply(lambda x: [i for i in x.split(' ')])
 
-        self.len = len(df)
-        self.df = df
+        self.df = self.df.drop(columns=['Phrase'])
+        self.len = len(self.df)
+
 
     def __getitem__(self, index):
         record = self.df.iloc[index]
