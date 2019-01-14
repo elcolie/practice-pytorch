@@ -85,7 +85,6 @@ class RawDataset(Dataset):
         self.df = self.df.drop(columns=['Phrase'])
         self.len = len(self.df)
 
-
     def __getitem__(self, index):
         record = self.df.iloc[index]
         return record.tokenized, record.Sentiment
