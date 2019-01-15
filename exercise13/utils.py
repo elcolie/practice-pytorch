@@ -79,15 +79,11 @@ class RawDataset(Dataset):
     def __init__(self, df: pd.DataFrame):
         super().__init__()
         self.df = df.copy()
-        self.df['Phrase'] = self.df['Phrase'].apply(lambda x: x.lower())
-        self.df['tokenized'] = self.df['Phrase'].apply(lambda x: [i for i in x.split(' ')])
-
-        self.df = self.df.drop(columns=['Phrase'])
         self.len = len(self.df)
 
     def __getitem__(self, index):
         record = self.df.iloc[index]
-        return record.tokenized, record.Sentiment
+        return record.Phrase, record.Sentiment
 
     def __len__(self):
         return self.len
