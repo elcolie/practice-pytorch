@@ -1,5 +1,4 @@
 import itertools
-import typing
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -148,12 +147,6 @@ def count_non_zero_length(aaa):
                 counting += 1
         bbb.append(counting)
     return bbb
-
-
-def ordered_batch(names: typing.List[str]) -> (torch.tensor, typing.List[int]):
-    dummy = make_var(sorted(names, key=len, reverse=True))
-    lengths = count_non_zero_length(dummy)
-    return dummy, lengths
 
 
 def str2ascii_arr(name):
