@@ -1,4 +1,5 @@
 import itertools
+import typing
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -120,3 +121,44 @@ def plot_confusion_matrix(cm, classes,
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
     plt.tight_layout()
+
+
+def make_var(names):
+    ans = []
+    for name in names:
+        name = name.lower()
+        tmp = [ord(chr) for chr in name]
+        tmp = torch.tensor(tmp, dtype=torch.long)
+        ans.append(tmp)
+    return torch.nn.utils.rnn.pad_sequence(ans, batch_first=True)
+
+
+def count_non_zero_length(aaa):
+    """
+    aaa = [[116, 105, 114,  97, 115],
+         [ 97, 110, 110,   0,   0],
+         [101, 108,   0,   0,   0]]
+    ans -> [5, 3, 2]
+    """
+    bbb = []
+    for item in aaa:
+        counting = 0
+        for element in item:
+            if element != 0:
+                counting += 1
+        bbb.append(counting)
+    return bbb
+
+
+def ordered_batch(names: typing.List[str]) -> (torch.tensor, typing.List[int]):
+    dummy = make_var(sorted(names, key=len, reverse=True))
+    lengths = count_non_zero_length(dummy)
+    return dummy, lengths
+
+
+def str2ascii_arr(name):
+    """
+    0-255
+    """
+    arr = [ord(c) for c in name]
+    return arr, len(arr)
