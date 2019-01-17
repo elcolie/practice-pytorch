@@ -124,7 +124,7 @@ def plot_confusion_matrix(cm, classes,
 
 def make_var(names):
     ans = []
-    for name in names:
+    for name in sorted(names, reverse=True, key=len):
         name = name.lower()
         tmp = [ord(chr) for chr in name]
         tmp = torch.tensor(tmp, dtype=torch.long)
