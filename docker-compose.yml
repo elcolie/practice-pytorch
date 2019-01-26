@@ -9,4 +9,5 @@ services:
     ports:
       # 8888 for jupyter notebook
       - "8888:8888"
+      - "9000:9000"
     command: ["jupyter", "notebook"]
