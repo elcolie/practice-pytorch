@@ -18,7 +18,7 @@ y_pred = []
 class OttoDataset(Dataset):
     def __init__(self, filename):
         df = pd.read_csv(filename)
-        self.x_data = df[
+        x_df = df[
             ['feat_1', 'feat_2', 'feat_3', 'feat_4', 'feat_5', 'feat_6', 'feat_7', 'feat_8', 'feat_9', 'feat_10',
              'feat_11', 'feat_12', 'feat_13', 'feat_14', 'feat_15', 'feat_16', 'feat_17', 'feat_18', 'feat_19',
              'feat_20', 'feat_21', 'feat_22', 'feat_23', 'feat_24', 'feat_25', 'feat_26', 'feat_27', 'feat_28',
@@ -30,11 +30,12 @@ class OttoDataset(Dataset):
              'feat_74', 'feat_75', 'feat_76', 'feat_77', 'feat_78', 'feat_79', 'feat_80', 'feat_81', 'feat_82',
              'feat_83', 'feat_84', 'feat_85', 'feat_86', 'feat_87', 'feat_88', 'feat_89', 'feat_90', 'feat_91',
              'feat_92', 'feat_93']]
+        self.x_data = (x_df - x_df.mean()) / x_df.std()
         self.y_data = df['target'].apply(lambda x: CLASS_MAP[x])
 
     def __getitem__(self, index):
         x = torch.tensor(self.x_data.iloc[index], dtype=torch.float)
-        y = torch.tensor(self.y_data.iloc[index], dtype=torch.long)
+        y = int(self.y_data.iloc[index])
         return (x, y)
 
     def __len__(self):
