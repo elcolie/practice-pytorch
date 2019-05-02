@@ -3,3 +3,8 @@ jupyter
 torch
 torchvision
 kaggle
+matplotlib
+nltk
+numpy
+Pillow
+argparse
