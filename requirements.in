@@ -8,3 +8,6 @@ nltk
 numpy
 Pillow
 argparse
+
+-e git+https://github.com/waleedka/cocoapi.git#egg=pycocotools&subdirectory=PythonAPI
+
