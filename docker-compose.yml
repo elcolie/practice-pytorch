@@ -1,5 +1,14 @@
 version: '3.7'
 services:
+
+  vnc:
+    # https://github.com/ConSol/docker-headless-vnc-container
+    # To send out token from host to remote use `pastebin.com`
+    image: consol/ubuntu-xfce-vnc
+    ports:
+      - "6901:6901"
+      - "5901:5901"
+
   webapp:
     build:
       context: .
