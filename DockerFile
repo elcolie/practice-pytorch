@@ -9,4 +9,12 @@ RUN apt-get install openssh-client -y
 WORKDIR /home/jovyan/
 USER jovyan
 ADD conda.in .
+RUN conda update -n base conda
 RUN conda install --file conda.in -y
+
+# For Coco
+RUN git clone https://github.com/pdollar/coco.git
+RUN cd coco/PythonAPI
+RUN make
+RUN make install
+RUN python setup.py install
