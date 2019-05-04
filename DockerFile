@@ -8,7 +8,7 @@ RUN apt-get install openssh-client -y
 WORKDIR /home/jovyan/
 USER jovyan
 RUN pip install --upgrade pip
-ADD requirements.in .
+ADD requirements.txt .
 RUN pip install -r requirements.txt
 ADD conda.in .
 RUN conda update -n base conda
