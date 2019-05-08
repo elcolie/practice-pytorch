@@ -16,7 +16,9 @@ RUN conda install --file conda.in -y
 
 # For Coco
 RUN git clone https://github.com/pdollar/coco.git
-RUN cd coco/PythonAPI
+WORKDIR /home/jovyan/coco/PythonAPI
 RUN make
 RUN make install
 RUN python setup.py install
+
+WORKDIR /home/jovyan/
